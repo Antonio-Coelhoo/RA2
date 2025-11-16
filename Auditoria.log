@@ -1,0 +1,22 @@
+LogEntry {timestamp = "<timestamp>", acao = Report, detalhes = "Gerar relat\243rio", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Adicionar, detalhes = "Adicionar Melancia 20", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Adicionar, detalhes = "Adicionar Laranja 35", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Atualizar, detalhes = "Atualizar Melancia para 15", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Atualizar, detalhes = "Atualizar Feijao para 1", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Report, detalhes = "Gerar relat\243rio", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Atualizar, detalhes = "Atualizar Laranja para 30", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Report, detalhes = "Gerar relat\243rio", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Atualizar, detalhes = "Atualizar Feijao para 5", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Remover, detalhes = "Remover Feijao 3", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Atualizar, detalhes = "Atualizar Melancia para 10", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Report, detalhes = "Gerar relat\243rio", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Report, detalhes = "Gerar relat\243rio", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Remover, detalhes = "Remover Melancia 1", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Report, detalhes = "Gerar relat\243rio", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Atualizar, detalhes = "Atualizar Feijao para 10", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Adicionar, detalhes = "Peira", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Remover, detalhes = "Peira", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Atualizar, detalhes = "Macarrao", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Report, detalhes = "Report", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Atualizar, detalhes = "Peira", status = Sucesso}
+LogEntry {timestamp = "<timestamp>", acao = Report, detalhes = "Report", status = Sucesso}
