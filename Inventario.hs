@@ -1,64 +1,72 @@
 module Inventario where
 
-
+import System.IO
+import Control.Exception (try, IOException)
 import Tipos
 import Utils
-import System.IO
 
+--------------------------------------------------------------
+-- 1. LÓGICA PURA
+--------------------------------------------------------------
 
-menu :: IO ()
-menu = do
-putStrLn "1 - Adicionar Item"
-putStrLn "2 - Remover Item"
-putStrLn "3 - Listar Itens"
-putStrLn "4 - Sair"
-putStr "Escolha: "
-op <- getLine
-case op of
-"1" -> adicionarItem >> menu
-"2" -> removerItem >> menu
-"3" -> listarItens >> menu
-"4" -> putStrLn "Saindo..."
-_ -> putStrLn "Opção inválida" >> menu
+adicionarItemInv :: Inventario -> Nome -> Quantidade -> Inventario
+adicionarItemInv inv nome qtd =
+    case lookup nome inv of
+        Nothing -> (nome, qtd) : inv
+        Just q0 -> map (\(n,q) -> if n == nome then (n, q0 + qtd) else (n,q)) inv
 
+removerItemInv :: Inventario -> Nome -> Quantidade -> Either String Inventario
+removerItemInv inv nome qtd =
+    case lookup nome inv of
+        Nothing -> Left "Item não encontrado."
+        Just qAtual ->
+            if qtd > qAtual
+                then Left "Quantidade insuficiente."
+                else Right (map (\(n,q) ->
+                        if n == nome then (n, qAtual - qtd) else (n,q)
+                    ) inv)
 
-adicionarItem :: IO ()
-adicionarItem = do
-putStrLn "Nome do item:"
-nome <- getLine
-putStrLn "Quantidade:"
-qtd <- readLn
-registrarLog ("Adicionado: " ++ nome)
-appendFile "Inventario.dat" (nome ++ ":" ++ show qtd ++ "\n")
+atualizarItemInv :: Inventario -> Nome -> Quantidade -> Either String Inventario
+atualizarItemInv inv nome qtd =
+    if qtd < 0 then Left "Quantidade inválida."
+    else case lookup nome inv of
+        Nothing -> Left "Item não existe."
+        Just _  -> Right (map (\(n,q) ->
+                    if n == nome then (n, qtd) else (n,q)
+                ) inv)
 
+--------------------------------------------------------------
+-- 2. PERSISTÊNCIA
+--------------------------------------------------------------
 
-removerItem :: IO ()
-removerItem = do
-putStrLn "Nome a remover:"
-nome <- getLine
-itens <- lerInventario
-let novos = filter ((/= nome) . fst) itens
-registrarLog ("Removido: " ++ nome)
-salvarInventario novos
+salvarInventario :: Inventario -> IO ()
+salvarInventario inv =
+    writeFile "Inventario.dat" $
+        unlines [n ++ ":" ++ show q | (n,q) <- inv]
 
+carregarInventario :: IO Inventario
+carregarInventario = do
+    txt <- readFileIfExists "Inventario.dat"
+    case txt of
+        Nothing -> do
+            let base = inventarioBase
+            salvarInventario base
+            return base
+        Just raw ->
+            return
+              [ (n, read q)
+              | linha <- lines raw
+              , let (n,rest) = break (== ':') linha
+              , rest /= ""
+              , let q = drop 1 rest
+              ]
 
-listarItens :: IO ()
-listarItens = do
-itens <- lerInventario
-mapM_ (\(n,q) -> putStrLn (n ++ " - " ++ show q)) itens
+--------------------------------------------------------------
+-- 3. INVENTÁRIO INICIAL OBRIGATÓRIO (>= 10 itens)
+--------------------------------------------------------------
 
-
-lerInventario :: IO [(String, Int)]
-lerInventario = do
-conteudo <- readFile "Inventario.dat"
-return (map parseItem (lines conteudo))
-
-
-salvarInventario :: [(String, Int)] -> IO ()
-salvarInventario itens = writeFile "Inventario.dat"
-(unlines [n ++ ":" ++ show q | (n,q) <- itens])
-
-
-parseItem :: String -> (String, Int)
-parseItem linha = (nome, read qtd)
-where (nome, _ : qtd) = break (== ':') linha
+inventarioBase :: Inventario
+inventarioBase =
+    [ ("Arroz",10), ("Feijao",10), ("Macarrao",10), ("Sal",10), ("Acucar",10)
+    , ("Alcool",10), ("Agua",10), ("Oleo",10), ("Cafe",10), ("Pao",10)
+    ]
